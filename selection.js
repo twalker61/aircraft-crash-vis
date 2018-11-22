@@ -234,13 +234,50 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                 });
   }
 
-  var sorted = Object.keys(names).sort();
+  var sorted = Object.keys(names).sort();  
+
+  sorted.forEach(function(d) {
+	console.log(names[d]);
+	d3.select('.button-container').append('p')
+        .append('button')
+        .attr("style", "background-color: lightskyblue;")
+        .attr("abbr", d)
+        .attr("class", "stateButton")
+        .text(names[d])
+        .on('click', function(){
+            console.log(this.getAttribute("abbr"));
+            var currAbbr = this.getAttribute("abbr");
+            var currColor = this.getAttribute("style");
+            if(selectedStates.includes(currAbbr)) {
+            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
+            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
+            } else {
+            	selectedStates.push(currAbbr);
+            	selectedStates.push(currAbbr);
+            	//selected.sort();
+            }
+            console.log(selectedStates);
+
+            if(currColor == "background-color: lightskyblue;") {
+            	this.setAttribute("style", "background-color: white;");
+            } else {
+            	this.setAttribute("style", "background-color: lightskyblue;");
+            }
+            updateBars();
+        });
+});
 
   d3.select('.button-container')
         .append('p')
         .append('button')
         .text('Add All')
+        .attr("class", "resetButton")
         .on('click', function(){
+        	//TODO: make all buttons green
+        	d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
+            	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: lightskyblue;");
+            });
+
             selectedStates = [];
             svg.selectAll('.bar')
                 .transition()
@@ -262,10 +299,14 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   d3.select('.button-container')
         .append('p')
         .append('button')
+        .attr("class", "resetButton")
         .text('Remove All')
         .on('click', function(){
-            console.log("clicked");
-            //svg.selectAll(".bar").style('fill', 'red');
+            //TODO: make all buttons white
+            d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
+            	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: white;");
+            });
+
             selectedStates = [];
             svg.selectAll('.bar')
                 .transition()
@@ -280,37 +321,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                 });
             //updateStateAxis();
 
-        });  
-
-  sorted.forEach(function(d) {
-	console.log(names[d]);
-	d3.select('.button-container').append('p')
-        .append('button')
-        .attr("style", "background-color: green;")
-        .attr("abbr", d)
-        .text(names[d])
-        .on('click', function(){
-            console.log(this.getAttribute("abbr"));
-            var currAbbr = this.getAttribute("abbr");
-            var currColor = this.getAttribute("style");
-            if(selectedStates.includes(currAbbr)) {
-            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
-            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
-            } else {
-            	selectedStates.push(currAbbr);
-            	selectedStates.push(currAbbr);
-            	//selected.sort();
-            }
-            console.log(selectedStates);
-
-            if(currColor == "background-color: green;") {
-            	this.setAttribute("style", "background-color: white;");
-            } else {
-            	this.setAttribute("style", "background-color: green;");
-            }
-            updateBars();
         });
-});
 
 		numberSort = function (a,b) {
             return a - b;
@@ -369,116 +380,104 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 //DELETE EVERYTHING BENEATH HERE
 
 
-  d3.select("body")
-        .append('p')
-        .append('text')
-        .text('State to be Removed: ')
-        .append('input')
-        .attr('id', 'removeValue');
+  // d3.select("body")
+  //       .append('p')
+  //       .append('text')
+  //       .text('State to be Removed: ')
+  //       .append('input')
+  //       .attr('id', 'removeValue');
 
-  d3.select('body')
-        .append('p')
-        .append('button')
-        .text('Remove State')
-        .on('click', function(){
-            console.log("clicked");
-            //svg.selectAll(".bar").style('fill', 'red');
-            svg.selectAll('.bar')
-                .filter(function(d) {
-                    //return d.frequency < document.getElementById("cutoffValue").value;
-                    console.log(d);
-                    console.log(document.getElementById("removeValue").value);
-                    return d == document.getElementById("removeValue").value;
-                })
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                    selectedStates.splice(selectedStates.indexOf(d), 1);
-                    selectedStates.sort();
-                    return 0;
-                });
-            //updateStateAxis();
-        });
+  // d3.select('body')
+  //       .append('p')
+  //       .append('button')
+  //       .text('Remove State')
+  //       .on('click', function(){
+  //           console.log("clicked");
+  //           //svg.selectAll(".bar").style('fill', 'red');
+  //           svg.selectAll('.bar')
+  //               .filter(function(d) {
+  //                   //return d.frequency < document.getElementById("cutoffValue").value;
+  //                   console.log(d);
+  //                   console.log(document.getElementById("removeValue").value);
+  //                   return d == document.getElementById("removeValue").value;
+  //               })
+  //               .transition()
+  //               .duration(function(d) {
+  //                   return 1000;
+  //               })
+  //               .delay(function(d) {
+  //                   return 1;
+  //               })
+  //               .attr('width', function(d) {
+  //                   selectedStates.splice(selectedStates.indexOf(d), 1);
+  //                   selectedStates.sort();
+  //                   return 0;
+  //               });
+  //           //updateStateAxis();
+  //       });
 
-  d3.select("body")
-        .append('p')
-        .append('text')
-        .text('State to be Added: ')
-        .append('input')
-        .attr('id', 'addValue');
+  // d3.select("body")
+  //       .append('p')
+  //       .append('text')
+  //       .text('State to be Added: ')
+  //       .append('input')
+  //       .attr('id', 'addValue');
 
-  d3.select('body')
-        .append('p')
-        .append('button')
-        .text('Add State')
-        .on('click', function(){
-            //console.log(d);
-            //svg.selectAll(".bar").style('fill', 'red');
-            //selectedStates.push(d);
-            svg.selectAll('.bar')
-                .filter(function(d) {
-                    //return d.frequency < document.getElementById("cutoffValue").value;
-                    console.log(d);
-                    console.log(document.getElementById("addValue").value);
-                    return d == document.getElementById("addValue").value;
-                })
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                  console.log(d);
-                  selectedStates.push(d);
-                  selectedStates.sort();
-                    return 10;
-                });
-            //updateStateAxis();
-        });
+  // d3.select('body')
+  //       .append('p')
+  //       .append('button')
+  //       .text('Add State')
+  //       .on('click', function(){
+  //           //console.log(d);
+  //           //svg.selectAll(".bar").style('fill', 'red');
+  //           //selectedStates.push(d);
+  //           svg.selectAll('.bar')
+  //               .filter(function(d) {
+  //                   //return d.frequency < document.getElementById("cutoffValue").value;
+  //                   console.log(d);
+  //                   console.log(document.getElementById("addValue").value);
+  //                   return d == document.getElementById("addValue").value;
+  //               })
+  //               .transition()
+  //               .duration(function(d) {
+  //                   return 1000;
+  //               })
+  //               .delay(function(d) {
+  //                   return 1;
+  //               })
+  //               .attr('width', function(d) {
+  //                 console.log(d);
+  //                 selectedStates.push(d);
+  //                 selectedStates.sort();
+  //                   return 10;
+  //               });
+  //           //updateStateAxis();
+  //       });
 
-   d3.select('body')
-        .append('p')
-        .append('button')
-        .text('Include New York')
-        .on('click', function(){
-            console.log("clicked");
-            selectedStates = [];
-            svg.selectAll('.bar')
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                    return 0;
-                });
-            y.domain([0, d3.max(abbrData, function(d, i) { 
-              //if(d == "NY") {return 0;}
-              return seriousData[i] + fatalData[i];
-            })]);
-            //yAxisGroup.transition().call(yAxis); 
-            yAxisGroup.transition().call(d3.axisLeft(y));
-            /*svg.selectAll('.bar')
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                  console.log(d);
-                    return 10;
-                });*/
-        }); 
+  //  d3.select('body')
+  //       .append('p')
+  //       .append('button')
+  //       .text('Include New York')
+  //       .on('click', function(){
+  //           console.log("clicked");
+  //           selectedStates = [];
+  //           svg.selectAll('.bar')
+  //               .transition()
+  //               .duration(function(d) {
+  //                   return 1000;
+  //               })
+  //               .delay(function(d) {
+  //                   return 1;
+  //               })
+  //               .attr('width', function(d) {
+  //                   return 0;
+  //               });
+  //           y.domain([0, d3.max(abbrData, function(d, i) { 
+  //             //if(d == "NY") {return 0;}
+  //             return seriousData[i] + fatalData[i];
+  //           })]);
+  //           //yAxisGroup.transition().call(yAxis); 
+  //           yAxisGroup.transition().call(d3.axisLeft(y));
+  //       }); 
 
 });

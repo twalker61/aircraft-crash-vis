@@ -32,12 +32,33 @@
   pointer-events: none;
 }
 
+.button-container {
+	display: grid;
+	grid-template-columns: auto auto auto auto auto auto auto;
+}
+
+.stateButton {
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  font-size: 15px;
+  text-align: center;
+  width: 160px;
+}
+
+.resetButton {
+border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  font-size: 15px;
+  text-align: center;
+  width: 160px;
+}
+
 	</style>
 </head>
 
 <body>
 	
-<svg width="960" height="600"></svg>
+<!-- <svg width="960" height="600"></svg> -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
 <script src="selection.js">
@@ -91,6 +112,8 @@
 	    <strong></strong> <span id="currentSerious"></span>
 		<br/>
 	</div>
+	<div id="reset-container" class="reset-container">
+		</div>
 	<div id="button-container" class="button-container">
 	</div>
 	<!-- <script src="main2.js">
