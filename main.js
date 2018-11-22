@@ -1,3 +1,5 @@
+//$("acontent").empty();
+
 var margin = {top: 20, right: 20, bottom: 70, left: 40},
     width = 600 - margin.left - margin.right,
     height = 1000 - margin.top - margin.bottom;

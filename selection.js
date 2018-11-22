@@ -1,6 +1,3 @@
-//$("bcontent").empty();
-var select = require("./selection.js");
-
 var margin = {top: 20, right: 20, bottom: 70, left: 40},
     width = 1200 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
@@ -90,7 +87,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
     selectedStates[(i*2)+1] = Object.keys(states)[i];
   }
   console.log(selectedStates);
-  selectedStates = select.getSelected();
+  //selectedStates = selected;
 
   x.domain(Object.keys(states).reverse());
   y.domain([0, d3.max(abbrData, function(d, i) { 
@@ -205,6 +202,173 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .on("mouseout", handleMouseOut);
   });
 
+  function updateBars() {
+  	console.log(selectedStates);
+  		svg.selectAll('.bar')
+                .filter(function(d) {
+                    return selectedStates.includes(d);
+                })
+                .transition()
+                .duration(function(d) {
+                    return 1000;
+                })
+                .delay(function(d) {
+                    return 1;
+                })
+                .attr('width', function(d) {
+                    return 10;
+                });
+         svg.selectAll('.bar')
+                .filter(function(d) {
+                    return !selectedStates.includes(d);
+                })
+                .transition()
+                .duration(function(d) {
+                    return 1000;
+                })
+                .delay(function(d) {
+                    return 1;
+                })
+                .attr('width', function(d) {
+                    return 0;
+                });
+  }
+
+  var sorted = Object.keys(names).sort();
+
+  d3.select('.button-container')
+        .append('p')
+        .append('button')
+        .text('Add All')
+        .on('click', function(){
+            selectedStates = [];
+            svg.selectAll('.bar')
+                .transition()
+                .duration(function(d) {
+                    return 1000;
+                })
+                .delay(function(d) {
+                    return 1;
+                })
+                .attr('width', function(d) {
+                  console.log(d);
+                  selectedStates.push(d);
+                    return 10;
+                });
+                selectedStates.sort();
+                //updateStateAxis();
+        }); 
+
+  d3.select('.button-container')
+        .append('p')
+        .append('button')
+        .text('Remove All')
+        .on('click', function(){
+            console.log("clicked");
+            //svg.selectAll(".bar").style('fill', 'red');
+            selectedStates = [];
+            svg.selectAll('.bar')
+                .transition()
+                .duration(function(d) {
+                    return 1000;
+                })
+                .delay(function(d) {
+                    return 1;
+                })
+                .attr('width', function(d) {
+                    return 0;
+                });
+            //updateStateAxis();
+
+        });  
+
+  sorted.forEach(function(d) {
+	console.log(names[d]);
+	d3.select('.button-container').append('p')
+        .append('button')
+        .attr("style", "background-color: green;")
+        .attr("abbr", d)
+        .text(names[d])
+        .on('click', function(){
+            console.log(this.getAttribute("abbr"));
+            var currAbbr = this.getAttribute("abbr");
+            var currColor = this.getAttribute("style");
+            if(selectedStates.includes(currAbbr)) {
+            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
+            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
+            } else {
+            	selectedStates.push(currAbbr);
+            	selectedStates.push(currAbbr);
+            	//selected.sort();
+            }
+            console.log(selectedStates);
+
+            if(currColor == "background-color: green;") {
+            	this.setAttribute("style", "background-color: white;");
+            } else {
+            	this.setAttribute("style", "background-color: green;");
+            }
+            updateBars();
+        });
+});
+
+		numberSort = function (a,b) {
+            return a - b;
+        };
+
+        function updateStateAxis() {
+            console.log(selectedStates);
+            x.domain(selectedStates.reverse());
+            /*xAxis = d3.svg.axis()
+              .scale(x)
+              .orient("bottom");*/
+            //svg.selectAll(".x.axis")
+              //.call(xAxis);
+            xAxisGroup.call(d3.axisBottom(x));
+
+            var ticks = [];
+            console.log(xAxisGroup);
+            //d3.selectAll('g.tick')["_parents"][0].forEach(function(d) {
+              //console.log(d.attributes[1].nodeValue);
+              console.log(svg.selectAll('g.tick')["_parents"][0]);
+              //var str = d.attributes[1].nodeValue;
+              var str = d3.selectAll('g.tick')["_parents"][0].attributes[0].nodeValue;
+              console.log(str.substring(str.indexOf("(") + 1, str.indexOf(",")));
+              str = str.substring(str.indexOf("(") + 1, str.indexOf(","));
+              if(parseInt(str) != 0) {
+                ticks.push(parseInt(str));
+              }
+              //return str.substring(str.indexOf("(") + 1, str.indexOf(","));
+            //});
+            //console.log(ticks);
+            ticks.sort(numberSort);
+            console.log(ticks);
+              
+            svg.selectAll('.bar')
+            .filter(function(d) {
+                return selectedStates.includes(d);
+            })
+            .attr("x", function(d, i){
+              console.log(i);
+              if(i >= (selectedStates.length / 2)) {i -= (selectedStates.length / 2);}
+              //return 15 + (i * ((width - 2 * 9) / selectedStates.length / 2));
+              return ticks[i] - 5;
+            })
+
+            d3.selectAll(".tick")["_parents"][0].forEach(function(d1) {
+              var data = d3.select(d1).data();
+              console.log(data);
+              if(names[data[0]] == null) {return;}
+              d3.select(d1)
+                .on("mouseover", handleMouseOver)                  
+                .on("mouseout", handleMouseOut);
+            });
+        }
+
+
+//DELETE EVERYTHING BENEATH HERE
+
+
   d3.select("body")
         .append('p')
         .append('text')
@@ -279,52 +443,6 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
             //updateStateAxis();
         });
 
-  d3.select('body')
-        .append('p')
-        .append('button')
-        .text('Add All')
-        .on('click', function(){
-            selectedStates = [];
-            svg.selectAll('.bar')
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                  console.log(d);
-                  selectedStates.push(d);
-                    return 10;
-                });
-                selectedStates.sort();
-                //updateStateAxis();
-        }); 
-
-  d3.select('body')
-        .append('p')
-        .append('button')
-        .text('Remove All')
-        .on('click', function(){
-            console.log("clicked");
-            //svg.selectAll(".bar").style('fill', 'red');
-            selectedStates = [];
-            svg.selectAll('.bar')
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                    return 0;
-                });
-            //updateStateAxis();
-
-        });  
-
    d3.select('body')
         .append('p')
         .append('button')
@@ -362,58 +480,5 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                     return 10;
                 });*/
         }); 
-
-        numberSort = function (a,b) {
-            return a - b;
-        };
-
-        function updateStateAxis() {
-            console.log(selectedStates);
-            x.domain(selectedStates.reverse());
-            /*xAxis = d3.svg.axis()
-              .scale(x)
-              .orient("bottom");*/
-            //svg.selectAll(".x.axis")
-              //.call(xAxis);
-            xAxisGroup.call(d3.axisBottom(x));
-
-            var ticks = [];
-            console.log(xAxisGroup);
-            //d3.selectAll('g.tick')["_parents"][0].forEach(function(d) {
-              //console.log(d.attributes[1].nodeValue);
-              console.log(svg.selectAll('g.tick')["_parents"][0]);
-              //var str = d.attributes[1].nodeValue;
-              var str = d3.selectAll('g.tick')["_parents"][0].attributes[0].nodeValue;
-              console.log(str.substring(str.indexOf("(") + 1, str.indexOf(",")));
-              str = str.substring(str.indexOf("(") + 1, str.indexOf(","));
-              if(parseInt(str) != 0) {
-                ticks.push(parseInt(str));
-              }
-              //return str.substring(str.indexOf("(") + 1, str.indexOf(","));
-            //});
-            //console.log(ticks);
-            ticks.sort(numberSort);
-            console.log(ticks);
-              
-            svg.selectAll('.bar')
-            .filter(function(d) {
-                return selectedStates.includes(d);
-            })
-            .attr("x", function(d, i){
-              console.log(i);
-              if(i >= (selectedStates.length / 2)) {i -= (selectedStates.length / 2);}
-              //return 15 + (i * ((width - 2 * 9) / selectedStates.length / 2));
-              return ticks[i] - 5;
-            })
-
-            d3.selectAll(".tick")["_parents"][0].forEach(function(d1) {
-              var data = d3.select(d1).data();
-              console.log(data);
-              if(names[data[0]] == null) {return;}
-              d3.select(d1)
-                .on("mouseover", handleMouseOver)                  
-                .on("mouseout", handleMouseOut);
-            });
-        }
 
 });

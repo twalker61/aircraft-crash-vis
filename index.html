@@ -20,7 +20,7 @@
 	}
 
 	.states :hover {
-  fill: red;
+  fill: orange;
 }
 
 .state-borders {
@@ -37,31 +37,53 @@
 
 <body>
 	
-<script src="http://d3js.org/d3.v4.min.js"></script>
-<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+<svg width="960" height="600"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
-<!-- <script>
+<script src="selection.js">
 
-var svg = d3.select("svg");
 
-var path = d3.geoPath();
 
-d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
-  if (error) throw error;
+</script>
 
-  svg.append("g")
-      .attr("class", "states")
-    .selectAll("path")
-    .data(topojson.feature(us, us.objects.states).features)
-    .enter().append("path")
-      .attr("d", path);
+<!-- <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a class="atab" href="#a_tab" data-toggle="tab">A</a></li>
+                <li><a class="btab" href="#b_tab" data-toggle="tab">B</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="a_tab">
+                    <h1>A</h1>
+                    <acontent></acontent>
+                </div>
+                <div class="tab-pane" id="b_tab">
+                    <h1>B</h1>
+                    <bcontent></bcontent>
+                </div>
+            </div>
+        </div>
 
-  svg.append("path")
-      .attr("class", "state-borders")
-      .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })));
-});
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 
-</script> -->
+        <script>
+            $.ajaxSetup ({
+                // Disable caching of AJAX responses
+                // Used when debugging
+                cache: false
+            });
+        
+            $.getScript("main2.js");
+            $(".atab").click(function() {
+                $.getScript("main.js");
+            })
+        </script>
+        <script>
+            $(".btab").click(function() {
+                $.getScript("main2.js");
+            })
+        </script> -->
+
 <div>
 	<div id="chart3">
 	    <strong></strong> <strong id="currentState"></strong>
@@ -69,10 +91,12 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 	    <strong></strong> <span id="currentSerious"></span>
 		<br/>
 	</div>
-<script src="main2.js">
-</script>
+	<div id="button-container" class="button-container">
+	</div>
+	<!-- <script src="main2.js">
+	</script> -->
 
-<div id="graph"></div>
+	<div id="graph"></div>
 </div>
 
 </body>
