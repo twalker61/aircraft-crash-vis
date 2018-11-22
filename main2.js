@@ -2,20 +2,20 @@ var margin = {top: 20, right: 20, bottom: 70, left: 40},
     width = 1200 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
-var x = d3.scale.ordinal().rangeRoundBands([width, 0], .05);
+//var x = d3.scale.ordinal().rangeRoundBands([width, 0], .05);
+var x = d3.scaleBand().rangeRound([width, 0], .05);
 
-var y = d3.scale.linear().range([height, 0]);
+//var y = d3.scale.linear().range([height, 0]);
+var y = d3.scaleLinear().range([height, 0]);
 
-var yAxis = d3.svg.axis()
+/*var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
     .ticks(10);
-    //.tickFormat(d3.time.format("%Y-%m"));
 
 var xAxis = d3.svg.axis()
     .scale(x)
-    .orient("bottom");
-    //.ticks(10);
+    .orient("bottom");*/
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -114,7 +114,8 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   var xAxisGroup = svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
+      //.call(xAxis)
+      .call(d3.axisBottom(x))
     .selectAll("text")
       .style("text-anchor", "middle")
       //.attr("dx", "0.8em")
@@ -123,7 +124,8 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 
   var yAxisGroup = svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
+      //.call(yAxis)
+      .call(d3.axisLeft(y))
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -203,7 +205,9 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
           document.getElementById('currentSerious').textContent = '';
       }
 
-  d3.selectAll(".tick")[0].forEach(function(d1) {
+  console.log(d3.selectAll(".tick"));
+
+  d3.selectAll(".tick")["_groups"][0].forEach(function(d1) {
     var data = d3.select(d1).data();
     console.log(data);
     if(names[data[0]] == null) {return;}
@@ -245,7 +249,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                     selectedStates.sort();
                     return 0;
                 });
-            updateStateAxis();
+            //updateStateAxis();
         });
 
   d3.select("body")
@@ -283,7 +287,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                   selectedStates.sort();
                     return 10;
                 });
-            updateStateAxis();
+            //updateStateAxis();
         });
 
   d3.select('body')
@@ -306,7 +310,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                     return 10;
                 });
                 selectedStates.sort();
-                updateStateAxis();
+                //updateStateAxis();
         }); 
 
   d3.select('body')
@@ -328,7 +332,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                 .attr('width', function(d) {
                     return 0;
                 });
-            updateStateAxis();
+            //updateStateAxis();
 
         });  
 
@@ -354,7 +358,8 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
               //if(d == "NY") {return 0;}
               return seriousData[i] + fatalData[i];
             })]);
-            yAxisGroup.transition().call(yAxis); 
+            //yAxisGroup.transition().call(yAxis); 
+            yAxisGroup.transition().call(d3.axisLeft(y));
             /*svg.selectAll('.bar')
                 .transition()
                 .duration(function(d) {
@@ -376,23 +381,27 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         function updateStateAxis() {
             console.log(selectedStates);
             x.domain(selectedStates.reverse());
-            xAxis = d3.svg.axis()
+            /*xAxis = d3.svg.axis()
               .scale(x)
-              .orient("bottom");
-            svg.selectAll(".x.axis")
-              .call(xAxis);
+              .orient("bottom");*/
+            //svg.selectAll(".x.axis")
+              //.call(xAxis);
+            xAxisGroup.call(d3.axisBottom(x));
 
             var ticks = [];
-            svg.selectAll('g.tick')[0].forEach(function(d) {
-              console.log(d.attributes[1].nodeValue);
-              var str = d.attributes[1].nodeValue;
+            console.log(xAxisGroup);
+            //d3.selectAll('g.tick')["_parents"][0].forEach(function(d) {
+              //console.log(d.attributes[1].nodeValue);
+              console.log(svg.selectAll('g.tick')["_parents"][0]);
+              //var str = d.attributes[1].nodeValue;
+              var str = d3.selectAll('g.tick')["_parents"][0].attributes[0].nodeValue;
               console.log(str.substring(str.indexOf("(") + 1, str.indexOf(",")));
               str = str.substring(str.indexOf("(") + 1, str.indexOf(","));
               if(parseInt(str) != 0) {
                 ticks.push(parseInt(str));
               }
               //return str.substring(str.indexOf("(") + 1, str.indexOf(","));
-            });
+            //});
             //console.log(ticks);
             ticks.sort(numberSort);
             console.log(ticks);
@@ -408,7 +417,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
               return ticks[i] - 5;
             })
 
-            d3.selectAll(".tick")[0].forEach(function(d1) {
+            d3.selectAll(".tick")["_parents"][0].forEach(function(d1) {
               var data = d3.select(d1).data();
               console.log(data);
               if(names[data[0]] == null) {return;}
