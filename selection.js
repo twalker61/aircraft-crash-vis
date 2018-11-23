@@ -45,7 +45,6 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   data.forEach(function(d) {
       var loc = d.Location;
       var abbr = loc.substring(loc.indexOf(",") + 2, loc.length);
-      //console.log(loc.substring(loc.indexOf(",") + 2, loc.length));
       if(states[abbr] != null) {
         if(states[abbr]["fatalInjuries"] != null) {
           states[abbr]["fatalInjuries"] += parseInt(d.Total_Fatal_Injuries);
@@ -57,8 +56,6 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         } else {
           states[abbr]["seriousInjuries"] = 0;
         }
-        //states[abbr] = 0;
-        //console.log(d);
       }
   });
 
@@ -80,9 +77,9 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   });
   console.log(stateData);
 
-  //var selectedStates = [];
   var selectedStates = [];
   for(i = 0; i < Object.keys(states).length; i++) {
+  	//adds 2 abbreviations per state (one per bar color)
     selectedStates[i*2] = Object.keys(states)[i];
     selectedStates[(i*2)+1] = Object.keys(states)[i];
   }
@@ -119,6 +116,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .style("text-anchor", "end");
       //.text("Value ($)");
 
+  //creates the bars for serious injuries (on bottom)
   svg.selectAll("bar")
       .data(abbrData)
       .enter()
@@ -126,30 +124,24 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .attr('class', 'bar')
       .style("fill", "mediumpurple")
       .attr("id", function(d) {
-        //return abbrData[i];
         return d;
       })
       .attr("x", function(d, i) {
-        //return 0;
         return 15 + (i * ((width - 2 * 9) / 51));
-        //return 15;
       })
       .attr("width", function(d, i) {
-        //return x(seriousData[i]);
         return 10;
       })
       .attr("y", function(d, i) {
-        //return margin.top + (i * ((height - 2 * margin.top) / 51) );
         return y(seriousData[i]);
       })
       .attr("height", function(d, i) {
-        //return ((height - 2 * margin.top) / 51);
-        //return y(seriousData[i]);
         return height - y(seriousData[i]);
       })
       .on("mouseover", handleMouseOver)
       .on("mouseout", handleMouseOut);
 
+     //creates bars for fatal injuries (on top of serious injury bars)
   svg.selectAll("bar")
       .data(abbrData)
       .enter()
@@ -157,28 +149,24 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .attr('class', 'bar')
       .style("fill", "springgreen")
       .attr("id", function(d) {
-        //return abbrData[i];
         return d;
       })
       .attr("x", function(d, i) {
-        //return x(seriousData[i]);
         return 15 + (i * ((width - 2 * 9) / 51));
       })
       .attr("width", function(d, i) {
-        //return x(fatalData[i]);
         return 10;
       })
       .attr("y", function(d, i) {
-        //return margin.top + (i * ((height - 2 * margin.top) / 51) );
         return y(fatalData[i]) - (height - y(seriousData[i]));
       })
       .attr("height", function(d, i) {
-        //return ((height - 2 * margin.top) / 51);
         return height - y(fatalData[i]);
       })
       .on("mouseover", handleMouseOver)
       .on("mouseout", handleMouseOut);
 
+      //these two functions handle hovering over the bars/labels
       function handleMouseOver(d, i) {
           document.getElementById('currentState').textContent = names[d] + " : ";
           document.getElementById('currentFatal').textContent = fatalData[abbrData.indexOf(d)] + " fatal injuries,";
@@ -202,8 +190,10 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .on("mouseout", handleMouseOut);
   });
 
+  //update which bars are visible based on selected states
   function updateBars() {
   	console.log(selectedStates);
+  		//adds all selected states
   		svg.selectAll('.bar')
                 .filter(function(d) {
                     return selectedStates.includes(d);
@@ -218,6 +208,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                 .attr('width', function(d) {
                     return 10;
                 });
+         //removes all states that aren't currently selected
          svg.selectAll('.bar')
                 .filter(function(d) {
                     return !selectedStates.includes(d);
@@ -236,6 +227,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 
   var sorted = Object.keys(names).sort();  
 
+  //adds buttons for each state
   sorted.forEach(function(d) {
 	console.log(names[d]);
 	d3.select('.button-container').append('p')
@@ -248,6 +240,8 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
             console.log(this.getAttribute("abbr"));
             var currAbbr = this.getAttribute("abbr");
             var currColor = this.getAttribute("style");
+
+            //adds/removes state from the selected array (does it twice bc there are 2 bars)
             if(selectedStates.includes(currAbbr)) {
             	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
             	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
@@ -258,6 +252,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
             }
             console.log(selectedStates);
 
+            //toggles color
             if(currColor == "background-color: lightskyblue;") {
             	this.setAttribute("style", "background-color: white;");
             } else {
@@ -273,11 +268,12 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         .text('Add All')
         .attr("class", "resetButton")
         .on('click', function(){
-        	//TODO: make all buttons green
+        	//make all buttons green
         	d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
             	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: lightskyblue;");
             });
 
+        	//fills up selected array & adds all bars
             selectedStates = [];
             svg.selectAll('.bar')
                 .transition()
@@ -302,11 +298,12 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         .attr("class", "resetButton")
         .text('Remove All')
         .on('click', function(){
-            //TODO: make all buttons white
+            //make all buttons white
             d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
             	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: white;");
             });
 
+            //clears selected array & removes all bars
             selectedStates = [];
             svg.selectAll('.bar')
                 .transition()
@@ -327,6 +324,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
             return a - b;
         };
 
+        //updates the x axis, not currently in use, need to update to v4
         function updateStateAxis() {
             console.log(selectedStates);
             x.domain(selectedStates.reverse());
