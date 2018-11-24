@@ -1,5 +1,5 @@
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
-    width = 1000 - margin.left - margin.right,
+var margin = {top: 20, right: 20, bottom: 70, left: 60},
+    width = 1100 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 //var x = d3.scale.ordinal().rangeRoundBands([width, 0], .05);
@@ -97,29 +97,42 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   .append("g")
     .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ")");
-  
 
   var xAxisGroup = svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       //.call(xAxis)
       .call(d3.axisBottom(x))
-    .selectAll("text")
+    /*.selectAll("text")
       .style("text-anchor", "middle")
       //.attr("dx", "0.8em")
       .attr("dy", ".71em");
-      //.attr("transform", "rotate(-90)" );
+      //.attr("transform", "rotate(-90)" );*/
+
+  var labels = svg.append("g");
+
+      labels.append("text")
+        .attr("class", "label")
+        .text("Number of Injuries")
+        .attr("transform", "translate(-30,"+height/2+"), rotate(-90)")
+        .style("text-anchor", "middle");
+
+        labels.append("text")
+        .attr("class", "label")
+        .text("State")
+        .attr("transform", "translate("+width/2+",450)")
+        .style("text-anchor", "middle");
 
   var yAxisGroup = svg.append("g")
       .attr("class", "y axis")
       //.call(yAxis)
       .call(d3.axisLeft(y))
-    .append("text")
+    /*.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end");
-      //.text("Value ($)");
+      //.text("Value ($)");*/
 
   //creates the bars for serious injuries (on bottom)
   svg.selectAll("bar")
@@ -132,7 +145,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         return d;
       })
       .attr("x", function(d, i) {
-        return 15 + (i * ((width - 2 * 9) / 51));
+        return 6 + (i * ((width - 2) / 51));
       })
       .attr("width", function(d, i) {
         return 10;
@@ -152,12 +165,12 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .enter()
       .append("rect")
       .attr('class', 'bar')
-      .style("fill", "springgreen")
+      .style("fill", "crimson")
       .attr("id", function(d) {
         return d;
       })
       .attr("x", function(d, i) {
-        return 15 + (i * ((width - 2 * 9) / 51));
+        return 6 + (i * ((width - 2) / 51));
       })
       .attr("width", function(d, i) {
         return 10;
@@ -243,7 +256,6 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
    mapstuff(sorted, names, selectedStates);
 });
 }*/
-
 
     numberSort = function (a,b) {
             return a - b;
