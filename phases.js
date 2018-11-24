@@ -19,12 +19,12 @@ injuredDataByPhase = [];
 fatalDataByPhase = [];
 
 var margin = {top: 60, right: 60, bottom: 100, left: 70},
-    	width = 1000 - margin.left - margin.right,
+    	width = 1200 - margin.left - margin.right,
     	height = 600 - margin.top - margin.bottom;
 
 var graphOffset = 41;
 
-var svg = d3.select("#phases-svg")
+var p_svg = d3.select("#phases-svg")
     		.attr("width", width)
     		.attr("height", height);
 
@@ -189,12 +189,12 @@ var svg = d3.select("#phases-svg")
 		var xAxis = d3.axisBottom(xScale);
 		var yAxis = d3.axisLeft(yScale);
 
-		svg.append("g")
+		p_svg.append("g")
 			.attr("class", "x-axis")
 			.attr("transform", "translate("+margin.left+","+(height-margin.bottom)+")")
 			.call(xAxis)
 
-		var text_g = svg.append("g")
+		var text_g = p_svg.append("g")
 
 		text_g.append("text")
 			.attr("class", "label")
@@ -203,7 +203,7 @@ var svg = d3.select("#phases-svg")
 			.style("text-anchor", "middle");
 		//svg_x.append()
 
-		svg.append("g")
+		p_svg.append("g")
 			.attr("class", "y-axis")
 			.attr("transform", "translate("+margin.left+","+ -margin.bottom+")")
 			.call(yAxis)
@@ -274,7 +274,7 @@ var svg = d3.select("#phases-svg")
 				})
 				//.curve(d3.curveMonotoneX);
 
-		path1 = svg.append('path')
+		path1 = p_svg.append('path')
 			.datum(filtered_injured)
 			.attr('d', line)
 			.attr("class", "injured");
@@ -282,7 +282,7 @@ var svg = d3.select("#phases-svg")
 			.datum(filtered_uninjured)
 			.attr('d', line)
 			.attr("class", "uninjured");*/
-		path3 = svg.append('path')
+		path3 = p_svg.append('path')
 			.datum(filtered_fatal)
 			.attr('d', line)
 			.attr("class", "fatal");
@@ -302,7 +302,7 @@ var svg = d3.select("#phases-svg")
 			})
 			.attr("r", 3);*/
 
-		g2 = svg.append("g");
+		g2 = p_svg.append("g");
 
 		g2.selectAll("circle")
 			.data(filtered_injured)
@@ -318,7 +318,7 @@ var svg = d3.select("#phases-svg")
 			.attr("r", 3);
 
 
-		g3 = svg.append("g");
+		g3 = p_svg.append("g");
 
 		g3.selectAll("circle")
 			.data(filtered_fatal)
@@ -333,7 +333,7 @@ var svg = d3.select("#phases-svg")
 			})
 			.attr("r", 3);
 
-		var label_g = svg.append("g");
+		var label_g = p_svg.append("g");
 		label_g.append("text")
 			.attr("class", "point-label")
 			.attr("transform", "translate("+margin.left/8+"," + (height - margin.bottom/1.5)+")")
@@ -476,7 +476,7 @@ function drawGraph() {
 	filtered_fatal.pop();
 	filtered_fatal.pop();
 
-	svg.select(".injured")
+	p_svg.select(".injured")
 		.datum(filtered_injured)
 		.transition()
 		.duration(750)
@@ -490,7 +490,7 @@ function drawGraph() {
 		.attr('d', line);*/
 		
 
-	svg.select(".fatal")
+	p_svg.select(".fatal")
 		.datum(filtered_fatal)
 		.transition()
 		.duration(750)
@@ -498,7 +498,7 @@ function drawGraph() {
 		
 
 	//console.log()
-	svg.selectAll(".injured-circle")
+	p_svg.selectAll(".injured-circle")
 		.data(filtered_injured)
 		.transition()
 		.duration(750)
@@ -514,7 +514,7 @@ function drawGraph() {
 			return yScale(d.sum) - margin.bottom;
 		})*/
 
-	svg.selectAll(".fatal-circle")
+	p_svg.selectAll(".fatal-circle")
 		.data(filtered_fatal)
 		.transition()
 		.duration(750)

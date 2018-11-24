@@ -1,4 +1,4 @@
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
+var margin = {top: 60, right: 60, bottom: 100, left: 70},
     width = 1200 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -17,7 +17,7 @@ var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");*/
 
-var svg = d3.select("#states-svg")
+var s_svg = d3.select("#states-svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -99,7 +99,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   //y.domain([0,50]);
   
 
-  var xAxisGroup = svg.append("g")
+  var xAxisGroup = s_svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       //.call(xAxis)
@@ -110,7 +110,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .attr("dy", ".71em");
       //.attr("transform", "rotate(-90)" );
 
-  var yAxisGroup = svg.append("g")
+  var yAxisGroup = s_svg.append("g")
       .attr("class", "y axis")
       //.call(yAxis)
       .call(d3.axisLeft(y))
@@ -122,7 +122,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       //.text("Value ($)");
 
   //creates the bars for serious injuries (on bottom)
-  svg.selectAll("bar")
+  s_svg.selectAll("bar")
       .data(abbrData)
       .enter()
       .append("rect")
@@ -147,7 +147,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .on("mouseout", handleMouseOut);
 
      //creates bars for fatal injuries (on top of serious injury bars)
-  svg.selectAll("bar")
+  s_svg.selectAll("bar")
       .data(abbrData)
       .enter()
       .append("rect")
@@ -202,7 +202,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
     selectedStates = selected;
   	console.log(selectedStates);
   		//adds all selected states
-  		svg.selectAll('.bar')
+  		s_svg.selectAll('.bar')
                 .filter(function(d) {
                     return selectedStates.includes(d);
                 })
@@ -217,7 +217,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                     return 10;
                 });
          //removes all states that aren't currently selected
-         svg.selectAll('.bar')
+         s_svg.selectAll('.bar')
                 .filter(function(d) {
                     return !selectedStates.includes(d);
                 })
