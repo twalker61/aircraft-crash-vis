@@ -2,84 +2,72 @@
 <meta charset="utf-8">
 
 <head>
-	<style>
-
-	.axis {
-	  font: 10px sans-serif;
-	}
-
-	.axis path,
-	.axis line {
-	  fill: none;
-	  stroke: #000;
-	  shape-rendering: crispEdges;
-	}
-
-	p.legend {
-	    text-align: right;
-	}
-
-	.states :hover {
-  fill: orange;
-}
-
-.state-borders {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 0.5px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  pointer-events: none;
-}
-
-.button-container {
-	display: grid;
-	grid-template-columns: auto auto auto auto auto auto auto;
-}
-
-.stateButton {
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 10px;
-  font-size: 15px;
-  text-align: center;
-  width: 160px;
-}
-
-.resetButton {
-border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 10px;
-  font-size: 15px;
-  text-align: center;
-  width: 160px;
-}
-
-	</style>
+	<title>Aircraft Accidents</title>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://d3js.org/topojson.v2.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 </head>
 
 <body>
 	
 <!-- <svg width="960" height="600"></svg> -->
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://d3js.org/topojson.v2.min.js"></script>
-<script src="selection.js"></script>
 
-<div>
-	<div id="chart3">
-	    <strong></strong> <strong id="currentState"></strong>
-	    <strong></strong> <span id="currentFatal"></span>
-	    <strong></strong> <span id="currentSerious"></span>
-		<br/>
-	</div>
-	<div id="stateBarChart" class="stateBarChart">
-	</div>
-	<div id="reset-container" class="reset-container">
-	</div>
-	<div id="button-container" class="button-container">
-	</div>
-	<!-- <script src="main2.js">
-	</script> -->
+<div class="tabbable">
+            <ul class="nav nav-tabs">
+            	<li class="active"><a class="map-tab" href="#map" data-toggle="tab">Map</a></li>
+                <li><a class="phase-tab" href="#phases" data-toggle="tab">Phases</a></li>
+                <li><a class="state-tab" href="#states" data-toggle="tab">States</a></li>
+            </ul>
+            <div class="tab-content">
+            	<div class="tab-pane active" id="map">
+            		<div id="stateBarChart" class="stateBarChart">
+            		</div>
+            		<div id="reset-container" class="reset-container">
+            		</div>
+            		<div id="button-container" class="button-container">
+            		</div>
+                </div>
+                <div class="tab-pane" id="phases">
+                    <svg id="phases-svg"></svg>
+                </div>
+                <div class="tab-pane" id="states">
+                	<svg id="states-svg"></svg>
+                    <div id="chart3">
+                    	<strong></strong> <strong id="currentState"></strong>
+                    	<strong</strong><span id="currentFatal"></span>
+                    	<strong></strong> <span id="currentSerious"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-	<div id="graph"></div>
-</div>
+<!-- <script src="selection.js" ></script> -->
+
+<script>
+        /*$.getScript("selection.js", function() {
+			   $.selection.map();
+			});*/
+		$.getScript("map.js", () => {
+			create();
+		});
+
+        $(".phase-tab").click(function() {
+            $.getScript("phases.js");
+        })
+        /*$(".map-tab").click(function() {
+
+            $.getScript("selection.js", function() {
+			   map();
+			});
+       		$.getScript("map.js");
+        })*/
+        $(".state-tab").click(function() {
+            $.getScript("selection.js");
+        })
+</script>
+
 
 </body>

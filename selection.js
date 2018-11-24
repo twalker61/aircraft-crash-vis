@@ -17,7 +17,7 @@ var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");*/
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#states-svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -59,11 +59,11 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       }
   });
 
-  console.log(states);
+  //console.log(states);
   var stateData = [], abbrData = [], seriousData = [], fatalData = [];
   Object.keys(states).forEach(function(d) {
-    console.log(d);
-    console.log(states[d]);
+    //console.log(d);
+    //console.log(states[d]);
     if(Object.keys(states[d]) != 0) {
       stateData.push(states[d]["fatalInjuries"] + states[d]["seriousInjuries"]);
       seriousData.push(states[d]["seriousInjuries"]);
@@ -75,16 +75,21 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
     }
     abbrData.push(d);
   });
-  console.log(stateData);
+  //console.log(stateData);
 
-  var selectedStates = [];
+  /*var selectedStates = [];
   for(i = 0; i < Object.keys(states).length; i++) {
   	//adds 2 abbreviations per state (one per bar color)
     selectedStates[i*2] = Object.keys(states)[i];
     selectedStates[(i*2)+1] = Object.keys(states)[i];
   }
-  console.log(selectedStates);
+  console.log(selectedStates);*/
   //selectedStates = selected;
+
+  var selectedStates;
+  $.getScript("map.js", function() {
+   selectedStates = getSelectedStates();
+});
 
   x.domain(Object.keys(states).reverse());
   y.domain([0, d3.max(abbrData, function(d, i) { 
@@ -179,19 +184,22 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
           document.getElementById('currentSerious').textContent = '';
       }
 
-  console.log(d3.selectAll(".tick"));
+  //console.log(d3.selectAll(".tick"));
 
   d3.selectAll(".tick")["_groups"][0].forEach(function(d1) {
     var data = d3.select(d1).data();
-    console.log(data);
+    //console.log(data);
     if(names[data[0]] == null) {return;}
     d3.select(d1)
       .on("mouseover", handleMouseOver)                  
       .on("mouseout", handleMouseOut);
   });
 
+});
+
   //update which bars are visible based on selected states
-  function updateBars() {
+  function updateBars(selected) {
+    selectedStates = selected;
   	console.log(selectedStates);
   		//adds all selected states
   		svg.selectAll('.bar')
@@ -225,100 +233,17 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                 });
   }
 
-  var sorted = Object.keys(names).sort();  
+/*$.getScript("map.js", function() {
+   mapstuff(sorted, names, selectedStates);
+});*/
 
-  //adds buttons for each state
-  sorted.forEach(function(d) {
-	console.log(names[d]);
-	d3.select('.button-container').append('p')
-        .append('button')
-        .attr("style", "background-color: lightskyblue;")
-        .attr("abbr", d)
-        .attr("class", "stateButton")
-        .text(names[d])
-        .on('click', function(){
-            console.log(this.getAttribute("abbr"));
-            var currAbbr = this.getAttribute("abbr");
-            var currColor = this.getAttribute("style");
-
-            //adds/removes state from the selected array (does it twice bc there are 2 bars)
-            if(selectedStates.includes(currAbbr)) {
-            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
-            	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
-            } else {
-            	selectedStates.push(currAbbr);
-            	selectedStates.push(currAbbr);
-            	//selected.sort();
-            }
-            console.log(selectedStates);
-
-            //toggles color
-            if(currColor == "background-color: lightskyblue;") {
-            	this.setAttribute("style", "background-color: white;");
-            } else {
-            	this.setAttribute("style", "background-color: lightskyblue;");
-            }
-            updateBars();
-        });
+/*function map() {
+  console.log("called map");
+  $.getScript("map.js", function() {
+   mapstuff(sorted, names, selectedStates);
 });
+}*/
 
-  d3.select('.button-container')
-        .append('p')
-        .append('button')
-        .text('Add All')
-        .attr("class", "resetButton")
-        .on('click', function(){
-        	//make all buttons green
-        	d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
-            	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: lightskyblue;");
-            });
-
-        	//fills up selected array & adds all bars
-            selectedStates = [];
-            svg.selectAll('.bar')
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                  console.log(d);
-                  selectedStates.push(d);
-                    return 10;
-                });
-                selectedStates.sort();
-                //updateStateAxis();
-        }); 
-
-  d3.select('.button-container')
-        .append('p')
-        .append('button')
-        .attr("class", "resetButton")
-        .text('Remove All')
-        .on('click', function(){
-            //make all buttons white
-            d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
-            	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: white;");
-            });
-
-            //clears selected array & removes all bars
-            selectedStates = [];
-            svg.selectAll('.bar')
-                .transition()
-                .duration(function(d) {
-                    return 1000;
-                })
-                .delay(function(d) {
-                    return 1;
-                })
-                .attr('width', function(d) {
-                    return 0;
-                });
-            //updateStateAxis();
-
-        });
 
 		numberSort = function (a,b) {
             return a - b;
@@ -477,5 +402,3 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   //           //yAxisGroup.transition().call(yAxis); 
   //           yAxisGroup.transition().call(d3.axisLeft(y));
   //       }); 
-
-});
