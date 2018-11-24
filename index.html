@@ -31,9 +31,11 @@
             		</div>
                 </div>
                 <div class="tab-pane" id="phases">
+                	<script>$.getScript("phases.js");</script>
                     <svg id="phases-svg"></svg>
                 </div>
                 <div class="tab-pane" id="states">
+                	<script>$.getScript("selection.js");</script>
                 	<div style="float: left;">
                 		<svg id="states-svg"></svg>
                 	</div>
@@ -55,18 +57,18 @@
 		$.getScript("map.js", () => {
 			create();
 		});
-        $(".phase-tab").click(function() {
-            $.getScript("phases.js");
-        })
+        //$(".phase-tab").click(function() {
+        //    $.getScript("phases.js");
+        //})
         /*$(".map-tab").click(function() {
             $.getScript("selection.js", function() {
 			   map();
 			});
        		$.getScript("map.js");
         })*/
-        $(".state-tab").click(function() {
-            $.getScript("selection.js");
-        })
+        //$(".state-tab").click(function() {
+        //    $.getScript("selection.js");
+        //})
 </script>
 
 

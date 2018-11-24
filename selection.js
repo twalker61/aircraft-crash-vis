@@ -123,6 +123,12 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         .attr("transform", "translate("+width/2+",450)")
         .style("text-anchor", "middle");
 
+        labels.append("text")
+        .text("Hover over a bar or label to view injury numbers")
+        .attr("transform", "translate(800, 470)")
+        .style("text-anchor", "middle")
+        .style("font-style", "italic");
+
   var yAxisGroup = svg.append("g")
       .attr("class", "y axis")
       //.call(yAxis)
@@ -165,7 +171,9 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .enter()
       .append("rect")
       .attr('class', 'bar')
-      .style("fill", "crimson")
+      .style("fill", function(d) {
+        return "crimson";
+      })
       .attr("id", function(d) {
         return d;
       })
@@ -173,6 +181,8 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         return 6 + (i * ((width - 2) / 51));
       })
       .attr("width", function(d, i) {
+        /*if(d == "NY") {return 20;}
+        else {return 10;} */
         return 10;
       })
       .attr("y", function(d, i) {
@@ -226,7 +236,10 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                 .delay(function(d) {
                     return 1;
                 })
-                .attr('width', function(d) {
+                .attr('width', function(d,i) {
+                    console.log(i);
+                    /*if(d == "NY" && i > selectedStates.length / 2) {return 50;}
+                    else {return 10;} */
                     return 10;
                 });
          //removes all states that aren't currently selected
