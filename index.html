@@ -34,12 +34,12 @@
                     <svg id="phases-svg"></svg>
                 </div>
                 <div class="tab-pane" id="states">
-                	<svg id="states-svg"></svg>
-                    <div id="chart3">
-                    	<strong></strong> <strong id="currentState"></strong>
-                    	<strong</strong><span id="currentFatal"></span>
-                    	<strong></strong> <span id="currentSerious"></span>
+                	<div id="chart3">
+                    	<strong>State: </strong> <span id="currentState"></span> <br/>
+                    	<strong>Fatal Injuries: </strong><span id="currentFatal"></span> <br/>
+                    	<strong>Serious Injuries: </strong> <span id="currentSerious"></span> <br/>
                     </div>
+                	<svg id="states-svg"></svg>
                 </div>
             </div>
         </div>
@@ -53,12 +53,10 @@
 		$.getScript("map.js", () => {
 			create();
 		});
-
         $(".phase-tab").click(function() {
             $.getScript("phases.js");
         })
         /*$(".map-tab").click(function() {
-
             $.getScript("selection.js", function() {
 			   map();
 			});

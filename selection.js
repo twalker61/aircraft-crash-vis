@@ -1,6 +1,6 @@
 var margin = {top: 20, right: 20, bottom: 70, left: 40},
-    width = 1200 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    width = 1000 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 //var x = d3.scale.ordinal().rangeRoundBands([width, 0], .05);
 var x = d3.scaleBand().rangeRound([width, 0], .05);
@@ -12,17 +12,9 @@ var y = d3.scaleLinear().range([height, 0]);
     .scale(y)
     .orient("left")
     .ticks(10);
-
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");*/
-
-var svg = d3.select("#states-svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
 
 
 
@@ -79,7 +71,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 
   /*var selectedStates = [];
   for(i = 0; i < Object.keys(states).length; i++) {
-  	//adds 2 abbreviations per state (one per bar color)
+    //adds 2 abbreviations per state (one per bar color)
     selectedStates[i*2] = Object.keys(states)[i];
     selectedStates[(i*2)+1] = Object.keys(states)[i];
   }
@@ -89,6 +81,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   var selectedStates;
   $.getScript("map.js", function() {
    selectedStates = getSelectedStates();
+   updateBars(selectedStates);
 });
 
   x.domain(Object.keys(states).reverse());
@@ -97,6 +90,13 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
     return seriousData[i] + fatalData[i];
   })]);
   //y.domain([0,50]);
+
+  var svg = d3.select("#states-svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
   
 
   var xAxisGroup = svg.append("g")
@@ -173,9 +173,9 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 
       //these two functions handle hovering over the bars/labels
       function handleMouseOver(d, i) {
-          document.getElementById('currentState').textContent = names[d] + " : ";
-          document.getElementById('currentFatal').textContent = fatalData[abbrData.indexOf(d)] + " fatal injuries,";
-          document.getElementById('currentSerious').textContent = seriousData[abbrData.indexOf(d)] + " serious injuries";
+          document.getElementById('currentState').textContent = names[d];
+          document.getElementById('currentFatal').textContent = fatalData[abbrData.indexOf(d)];
+          document.getElementById('currentSerious').textContent = seriousData[abbrData.indexOf(d)];
       }
 
       function handleMouseOut() {
@@ -200,9 +200,9 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   //update which bars are visible based on selected states
   function updateBars(selected) {
     selectedStates = selected;
-  	console.log(selectedStates);
-  		//adds all selected states
-  		svg.selectAll('.bar')
+    console.log(selectedStates);
+      //adds all selected states
+      d3.selectAll('.bar')
                 .filter(function(d) {
                     return selectedStates.includes(d);
                 })
@@ -217,7 +217,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                     return 10;
                 });
          //removes all states that aren't currently selected
-         svg.selectAll('.bar')
+         d3.selectAll('.bar')
                 .filter(function(d) {
                     return !selectedStates.includes(d);
                 })
@@ -245,7 +245,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 }*/
 
 
-		numberSort = function (a,b) {
+    numberSort = function (a,b) {
             return a - b;
         };
 
@@ -298,7 +298,6 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                 .on("mouseout", handleMouseOut);
             });
         }
-
 
 //DELETE EVERYTHING BENEATH HERE
 
