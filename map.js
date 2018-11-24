@@ -27,9 +27,9 @@ function create () {
   //console.log(selectedStates);
 
   console.log("Map");
-  	sorted.forEach(function(d) {
-  	//console.log(names[d]);
-  	d3.select('.button-container').append('p')
+    sorted.forEach(function(d) {
+    //console.log(names[d]);
+    d3.select('.button-container').append('p')
           .append('button')
           .attr("style", "background-color: lightskyblue;")
           .attr("abbr", d)
@@ -42,20 +42,20 @@ function create () {
   
               //adds/removes state from the selected array (does it twice bc there are 2 bars)
               if(selectedStates.includes(currAbbr)) {
-              	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
-              	selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
+                selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
+                selectedStates.splice(selectedStates.indexOf(currAbbr), 1);
               } else {
-              	selectedStates.push(currAbbr);
-              	selectedStates.push(currAbbr);
-              	//selected.sort();
+                selectedStates.push(currAbbr);
+                selectedStates.push(currAbbr);
+                //selected.sort();
               }
               //console.log(selectedStates);
   
               //toggles color
               if(currColor == "background-color: lightskyblue;") {
-              	this.setAttribute("style", "background-color: white;");
+                this.setAttribute("style", "background-color: white;");
               } else {
-              	this.setAttribute("style", "background-color: lightskyblue;");
+                this.setAttribute("style", "background-color: lightskyblue;");
               }
               $.getScript("selection.js", () => {
                 //console.log("Before");
@@ -70,12 +70,12 @@ function create () {
           .text('Add All')
           .attr("class", "resetButton")
           .on('click', function(){
-          	//make all buttons green
-          	d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
-              	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: lightskyblue;");
+            //make all buttons green
+            d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
+                d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: lightskyblue;");
               });
   
-          	//fills up selected array & adds all bars
+            //fills up selected array & adds all bars
               selectedStates = [];
               for(i = 0; i < Object.keys(states).length; i++) {
                 //adds 2 abbreviations per state (one per bar color)
@@ -116,7 +116,7 @@ function create () {
           .on('click', function(){
               //make all buttons white
               d3.selectAll('.stateButton')["_groups"][0].forEach(function(d,i) {
-              	d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: white;");
+                d3.selectAll('.stateButton')["_groups"][0][i].setAttribute("style", "background-color: white;");
               });
   
               //clears selected array & removes all bars

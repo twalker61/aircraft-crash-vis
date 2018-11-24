@@ -17,9 +17,9 @@
 
 <div class="tabbable">
             <ul class="nav nav-tabs">
-            	<li class="active"><a class="map-tab" href="#map" data-toggle="tab">Map</a></li>
-                <li><a class="phase-tab" href="#phases" data-toggle="tab">Phases</a></li>
-                <li><a class="state-tab" href="#states" data-toggle="tab">States</a></li>
+            	<li class="active"><a class="map-tab" href="#map" data-toggle="tab">Select States</a></li>
+                <li><a class="phase-tab" href="#phases" data-toggle="tab">View Injuries by Phase</a></li>
+                <li><a class="state-tab" href="#states" data-toggle="tab">View Injuries by State</a></li>
             </ul>
             <div class="tab-content">
             	<div class="tab-pane active" id="map">
@@ -36,12 +36,14 @@
                 </div>
                 <div class="tab-pane" id="states">
                 	<script>$.getScript("selection.js");</script>
-                	<svg id="states-svg"></svg>
-                    <div id="chart3">
-                    	<strong></strong> <strong id="currentState"></strong>
-                    	<strong</strong><span id="currentFatal"></span>
-                    	<strong></strong> <span id="currentSerious"></span>
-                    </div>
+                	<div style="float: left;">
+                		<svg id="states-svg"></svg>
+                	</div>
+                	<div id="chart3" style="float: left;">
+                    	<strong>State: </strong> <span id="currentState"></span> <br/>
+                    	<strong style="color: crimson;">Fatal Injuries: </strong><span id="currentFatal"></span> <br/>
+                    	<strong style="color: mediumpurple;">Serious Injuries: </strong> <span id="currentSerious"></span> <br/>
+                    </div>  
                 </div>
             </div>
         </div>
@@ -55,22 +57,18 @@
 		$.getScript("map.js", () => {
 			create();
 		});
-		
-		
-
-        // $(".phase-tab").click(function() {
-        //     $.getScript("phases.js");
-        // })
+        //$(".phase-tab").click(function() {
+        //    $.getScript("phases.js");
+        //})
         /*$(".map-tab").click(function() {
-
             $.getScript("selection.js", function() {
 			   map();
 			});
        		$.getScript("map.js");
         })*/
-        // $(".state-tab").click(function() {
-        //     $.getScript("selection.js");
-        // })
+        //$(".state-tab").click(function() {
+        //    $.getScript("selection.js");
+        //})
 </script>
 
 
