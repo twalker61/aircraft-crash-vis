@@ -1,4 +1,4 @@
-var selectedStates;
+/*var selectedStates;
 
 var states = {"AK" : {}, "AL" : {}, "AR" : {}, "AZ": {}, "CA" : {}, "CO" : {}, "CT" : {}, "DC" : {},
   "DE" : {},"FL" : {},"GA" : {},"HI" : {},"IA" : {},"ID" : {},"IL" : {},"IN" : {},"KS" : {},
@@ -53,4 +53,4 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   m_svg.append("path")
       .attr("class", "state-borders")
       .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })));
-});
+});*/
