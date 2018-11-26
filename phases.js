@@ -10,16 +10,7 @@ var filtered_fatal;
 var xScale, yScale;
 	var g1, g2, g3, line, path1, path2, path3;
 
-/*var removedStates = [];
-    var addedStates = ["AL", "GA", "ME", "VT", "MA", "NY", "CT", "RI", 
-    	"NJ", "PA", "MD", "VA", "NC", "SC", "FL", "TN", "MS", "KY", "IN", 
-    	"OH", "MI", "WV", "MO", "MN", "TX", "LA", "AR", "AZ", "UT", "WY", 
-    	"CA", "OR", "WA", "ID", "ND", "SD", "IL", "NE", "KA", "HI", "AK", 
-    	"CO", "PR", "NV", "NM", "GU", "Kauai", "IA", "DE", "NH", "OK", "WI"];*/
-
-function create() {
-
-	var margin = {top: 60, right: 60, bottom: 100, left: 70},
+var margin = {top: 60, right: 60, bottom: 100, left: 70},
 	    	width = 1200 - margin.left - margin.right,
 	    	height = 600 - margin.top - margin.bottom;
 
@@ -28,6 +19,8 @@ function create() {
 	var p_svg = d3.select("#phases-svg")
 	    		.attr("width", width)
 	    		.attr("height", height);
+
+function create() {
 
 	    //process data now
 	    //nest by phase, and then within each phase nest by state
@@ -364,6 +357,7 @@ function drawGraph(addedStates) {
 		.transition()
 		.duration(750)
 		.attr("cy", (d) => {
+			console.log("moving");
 			return yScale(d.sum) - margin.bottom;
 		})
 
