@@ -1,4 +1,4 @@
-
+function create() {
 var margin = {top: 20, right: 60, bottom: 100, left: 70},
     width = 1100 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -95,7 +95,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 
   x.domain(Object.keys(states).reverse());
   y.domain([0, d3.max(abbrData, function(d, i) { 
-    if(d == "NY") {return 0;}
+    //if(d == "NY") {return 0;}
     return seriousData[i] + fatalData[i];
   })]);
   //y.domain([0,50]);
@@ -118,36 +118,94 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .attr("dy", ".71em");
       //.attr("transform", "rotate(-90)" );*/
 
+  var yAxisGroup = s_svg.append("g")
+        .attr("class", "y axis")
+        //.call(yAxis)
+        .call(d3.axisLeft(y))
+      /*.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end");
+        //.text("Value ($)");*/
+
   var labels = s_svg.append("g");
 
       labels.append("text")
         .attr("class", "label")
         .text("Number of Injuries")
-        .attr("transform", "translate(-30,"+height/2+"), rotate(-90)")
+        .attr("transform", "translate(-40,"+height/2+"), rotate(-90)")
         .style("text-anchor", "middle");
 
         labels.append("text")
         .attr("class", "label")
         .text("State")
-        .attr("transform", "translate("+width/2+",450)")
+        .attr("transform", "translate("+width/2+",430)")
         .style("text-anchor", "middle");
 
         labels.append("text")
         .text("Hover over a bar or label to view injury numbers")
-        .attr("transform", "translate(800, 470)")
-        .style("text-anchor", "middle")
-        .style("font-style", "italic");
+        .attr("transform", "translate(490, 470)")
+        .style("text-anchor", "middle");
 
-  var yAxisGroup = s_svg.append("g")
-      .attr("class", "y axis")
-      //.call(yAxis)
-      .call(d3.axisLeft(y))
-    /*.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end");
-      //.text("Value ($)");*/
+  d3.select("#nyScaleButton")
+    .on("click", function() {
+      console.log(this.textContent);
+      if(this.textContent == "Exclude NY from Scale") {
+        y.domain([0, d3.max(abbrData, function(d, i) { 
+          if(d == "NY") {return 0;}
+          return seriousData[i] + fatalData[i];
+        })]);
+        $("#nyScaleButton").text("Include NY in Scale");
+      } else if (this.textContent == "Include NY in Scale") {
+        y.domain([0, d3.max(abbrData, function(d, i) { 
+          return seriousData[i] + fatalData[i];
+        })]);
+        $("#nyScaleButton").text("Exclude NY from Scale");
+      }
+      
+      yAxisGroup.call(d3.axisLeft(y));
+      updateY();
+    });
+
+  function updateY() {
+      d3.selectAll('.bar')
+                .filter(function(d, i) {
+                    return this.getAttribute("style") == "fill: mediumpurple;";
+                })
+                .transition()
+                .duration(function(d) {
+                    return 1000;
+                })
+                .delay(function(d) {
+                    return 1;
+                })
+                .attr('y', function(d,i) {
+                    return y(seriousData[i]);
+                })
+                .attr("height", function(d, i) {
+                  return height - y(seriousData[i]);
+                });
+
+         d3.selectAll('.bar')
+                .filter(function(d, i) {
+                    return this.getAttribute("style") == "fill: crimson;";
+                })
+                .transition()
+                .duration(function(d) {
+                    return 1000;
+                })
+                .delay(function(d) {
+                    return 1;
+                })
+                .attr("y", function(d, i) {
+                  return y(fatalData[i]) - (height - y(seriousData[i]));
+                })
+                .attr("height", function(d, i) {
+                  return height - y(fatalData[i]);
+                });
+    }
+    
 
   //creates the bars for serious injuries (on bottom)
   s_svg.selectAll("bar")
@@ -236,7 +294,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   });
 
 });
-
+}
   //update which bars are visible based on selected states
   function updateBars(selected) {
     selectedStates = selected;
@@ -259,8 +317,8 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                     else {return 10;} */
                     return 10;
                 });
-         //removes all states that aren't currently selected
 
+         //removes all states that aren't currently selected
          d3.selectAll('.bar')
                 .filter(function(d) {
                     return !selectedStates.includes(d);

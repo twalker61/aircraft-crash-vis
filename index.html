@@ -29,6 +29,9 @@
             		</div>
             		<div id="button-container" class="button-container">
             		</div>
+            		<div style="text-align: center; padding-top: 50px;">
+            			<span style="font-style: italic;">Select which states' data you wish to view. Blue states are selected; white states are not selected.</span>
+            		</div>
                 </div>
                 <div class="tab-pane" id="phases">
                 	<script>$.getScript("phases.js", () => {
@@ -48,7 +51,9 @@
                     <!-- <p>Hover over each stage's total or click on a circle to see the stage statistics.</p> -->
                 </div>
                 <div class="tab-pane" id="states">
-                	<script>$.getScript("selection.js");</script>
+                	<script>$.getScript("selection.js", () => {
+                		create();
+                	});</script>
                 	<div style="float: left;">
                 		<svg id="states-svg"></svg>
                 	</div>
@@ -56,6 +61,9 @@
                     	<strong>State: </strong> <span id="currentState"></span> <br/>
                     	<strong style="color: crimson;">Fatal Injuries: </strong><span id="currentFatal"></span> <br/>
                     	<strong style="color: mediumpurple;">Serious Injuries: </strong> <span id="currentSerious"></span> <br/>
+                    	<div style="padding-top: 30px;">
+                    	<button id="nyScaleButton" class="ny-scale-button">Exclude NY from Scale</button>
+                    	</div>
                     </div>  
                 </div>
             </div>
