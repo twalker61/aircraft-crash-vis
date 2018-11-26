@@ -17,22 +17,22 @@
   display: none;
 }*/
 
-	.axis {
-	  font: 10px sans-serif;
-	}
+  .axis {
+    font: 10px sans-serif;
+  }
 
-	.axis path,
-	.axis line {
-	  fill: none;
-	  stroke: #000;
-	  shape-rendering: crispEdges;
-	}
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
 
-	p.legend {
-	    text-align: right;
-	}
+  p.legend {
+      text-align: right;
+  }
 
-	.states :hover {
+  .states :hover {
   fill: orange;
 }
 
@@ -46,8 +46,8 @@
 }
 
 .button-container {
-	display: grid;
-	grid-template-columns: auto auto auto auto auto auto auto;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto;
 }
 
 .stateButton {
@@ -68,37 +68,38 @@ border: 1px solid rgba(0, 0, 0, 0.8);
 
 .injured {
   stroke-width:2px;
-  stroke:#0000FF;
+  stroke:mediumpurple;
   fill:none;
 }
 
-.uninjured {
+/*.uninjured {
   stroke-width:2px;
   stroke:#00FF00;
   fill:none;
-}
+}*/
 
 .fatal {
   stroke-width:2px;
-  stroke:#FF0000;
+  stroke:crimson;
   fill:none;
 }
 
-.uninjured-circle {
+/*.uninjured-circle {
   fill:#00FF00;
   stroke:none;
+}*/
+
+.serious-injury {
+  fill:mediumpurple;
+  /*stroke:none;*/
 }
 
-.injured-circle {
-  fill:#0000FF;
-  stroke:none;
-}
-
-.fatal-circle {
-  fill:#FF0000;
-  stroke:none;
+.fatal-injury {
+  fill:crimson;
+  /*stroke:none;*/
 }
 
 .point-label {
   font-size: 12px;
+  color:#7eb338;
 }

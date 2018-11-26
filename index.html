@@ -31,8 +31,21 @@
             		</div>
                 </div>
                 <div class="tab-pane" id="phases">
-                	<script>$.getScript("phases.js");</script>
-                    <svg id="phases-svg"></svg>
+                	<script>$.getScript("phases.js", () => {
+                        create();
+                    });</script>
+                    <div style="float: left;">
+                        <svg id="phases-svg"></svg>
+                        <p style="text-align:center;">Hover over each stage's total or click on a circle to see the stage statistics.</p>
+                    </div>
+                    
+                    <div id="chart3" style="float: left;">
+                        <strong>Phase: </strong> <span id="currentPhase"></span> <br/>
+                        <strong style="color: crimson;">Fatal Injuries: </strong><span id="currFatal"></span> <br/>
+                        <strong style="color: mediumpurple;">Serious Injuries: </strong> <span id="currSerious"></span> <br/>
+                        <strong style="color: #7eb338;">Uninjured: </strong> <span id="currUninjured"></span> <br/>
+                    </div>
+                    <!-- <p>Hover over each stage's total or click on a circle to see the stage statistics.</p> -->
                 </div>
                 <div class="tab-pane" id="states">
                 	<script>$.getScript("selection.js");</script>

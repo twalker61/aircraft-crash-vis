@@ -1,4 +1,5 @@
-var margin = {top: 20, right: 20, bottom: 70, left: 60},
+
+var margin = {top: 20, right: 60, bottom: 100, left: 70},
     width = 1100 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -16,19 +17,27 @@ var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");*/
 
+var s_svg = d3.select("#states-svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
 
 
 d3.csv("aircraft_incidents.csv", function(error, data) {
 
   var states = {"AK" : {}, "AL" : {}, "AR" : {}, "AZ": {}, "CA" : {}, "CO" : {}, "CT" : {}, "DC" : {},
-  "DE" : {},"FL" : {},"GA" : {},"HI" : {},"IA" : {},"ID" : {},"IL" : {},"IN" : {},"KS" : {},
+  "DE" : {},"FL" : {},"GA" : {}, "HI" : {},"IA" : {},"ID" : {},"IL" : {},"IN" : {},"KS" : {},
   "KY" : {},"LA" : {},"MA" : {},"MD" : {},"ME" : {},"MI" : {},"MN" : {},"MO" : {},"MS" : {},
   "MT" : {},"NC" : {},"ND" : {},"NE" : {},"NH" : {},"NJ" : {},"NM" : {},"NV" : {},"NY" : {},
   "OH" : {},"OK" : {},"OR" : {},"PA" : {},"RI" : {},"SC" : {},"SD" : {},"TN" : {},"TX" : {},
   "UT" : {},"VA" : {},"VT" : {},"WA" : {},"WI" : {},"WV" : {},"WY" : {}};
 
   var names = {"AL" : "Alabama", "AK" : "Alaska", "AZ" : "Arizona", "AR": "Arkansas", "CA" : "California", "CO" : "Colorado", "CT" : "Connecticut", "DC" : "District of Columbia",
-  "DE" : "Delaware","FL" : "Florida","GA" : "Georgia","HI" : "Hawaii","ID" : "Idaho","IL" : "Illinois","IN" : "Indiana","IA" : "Iowa","KS" : "Kansas",
+  "DE" : "Delaware","FL" : "Florida","GA" : "Georgia", "HI" : "Hawaii","ID" : "Idaho","IL" : "Illinois","IN" : "Indiana","IA" : "Iowa","KS" : "Kansas",
   "KY" : "Kentucky","LA" : "Louisiana","ME" : "Maine","MD" : "Maryland","MA" : "Massachusetts","MI" : "Michigan","MN" : "Minnesota","MS" : "Mississippi","MO" : "Missouri",
   "MT" : "Montana","NE" : "Nebraska","NV" : "Nevada","NH" : "New Hampshire","NJ" : "New Jersey","NM" : "New Mexico","NY" : "New York","NC" : "North Carolina","ND" : "North Dakota",
   "OH" : "Ohio","OK" : "Oklahoma","OR" : "Oregon","PA" : "Pennsylvania","RI" : "Rhode Island","SC" : "South Carolina","SD" : "South Dakota","TN" : "Tennessee","TX" : "Texas",
@@ -91,14 +100,14 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   })]);
   //y.domain([0,50]);
 
-  var svg = d3.select("#states-svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
+  // var s_svg = d3.select("#states-svg")
+  //   .attr("width", width + margin.left + margin.right)
+  //   .attr("height", height + margin.top + margin.bottom)
+  // .append("g")
+  //   .attr("transform", 
+  //         "translate(" + margin.left + "," + margin.top + ")");
 
-  var xAxisGroup = svg.append("g")
+  var xAxisGroup = s_svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       //.call(xAxis)
@@ -109,7 +118,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .attr("dy", ".71em");
       //.attr("transform", "rotate(-90)" );*/
 
-  var labels = svg.append("g");
+  var labels = s_svg.append("g");
 
       labels.append("text")
         .attr("class", "label")
@@ -129,7 +138,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         .style("text-anchor", "middle")
         .style("font-style", "italic");
 
-  var yAxisGroup = svg.append("g")
+  var yAxisGroup = s_svg.append("g")
       .attr("class", "y axis")
       //.call(yAxis)
       .call(d3.axisLeft(y))
@@ -141,7 +150,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       //.text("Value ($)");*/
 
   //creates the bars for serious injuries (on bottom)
-  svg.selectAll("bar")
+  s_svg.selectAll("bar")
       .data(abbrData)
       .enter()
       .append("rect")
@@ -162,11 +171,12 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .attr("height", function(d, i) {
         return height - y(seriousData[i]);
       })
+      //.on("click", display);
       .on("mouseover", handleMouseOver)
       .on("mouseout", handleMouseOut);
 
      //creates bars for fatal injuries (on top of serious injury bars)
-  svg.selectAll("bar")
+  s_svg.selectAll("bar")
       .data(abbrData)
       .enter()
       .append("rect")
@@ -191,6 +201,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       .attr("height", function(d, i) {
         return height - y(fatalData[i]);
       })
+      //.on("click", display);
       .on("mouseover", handleMouseOver)
       .on("mouseout", handleMouseOut);
 
@@ -207,6 +218,12 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
           document.getElementById('currentSerious').textContent = '';
       }
 
+      function display(d, i) {
+          document.getElementById('currentState').textContent = names[d];
+          document.getElementById('currentFatal').textContent = fatalData[abbrData.indexOf(d)];
+          document.getElementById('currentSerious').textContent = seriousData[abbrData.indexOf(d)];
+      }
+
   //console.log(d3.selectAll(".tick"));
 
   d3.selectAll(".tick")["_groups"][0].forEach(function(d1) {
@@ -215,7 +232,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
     if(names[data[0]] == null) {return;}
     d3.select(d1)
       .on("mouseover", handleMouseOver)                  
-      .on("mouseout", handleMouseOut);
+      .on("mouseout", handleMouseOut)
   });
 
 });
@@ -223,7 +240,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
   //update which bars are visible based on selected states
   function updateBars(selected) {
     selectedStates = selected;
-    console.log(selectedStates);
+    //console.log(selectedStates);
       //adds all selected states
       d3.selectAll('.bar')
                 .filter(function(d) {
@@ -237,12 +254,13 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
                     return 1;
                 })
                 .attr('width', function(d,i) {
-                    console.log(i);
+                    //console.log(i);
                     /*if(d == "NY" && i > selectedStates.length / 2) {return 50;}
                     else {return 10;} */
                     return 10;
                 });
          //removes all states that aren't currently selected
+
          d3.selectAll('.bar')
                 .filter(function(d) {
                     return !selectedStates.includes(d);
