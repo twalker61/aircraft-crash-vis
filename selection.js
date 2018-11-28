@@ -47,21 +47,28 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       var loc = d.Location;
       var abbr = loc.substring(loc.indexOf(",") + 2, loc.length);
       if(states[abbr] != null) {
-        if(states[abbr]["fatalInjuries"] != null) {
-          states[abbr]["fatalInjuries"] += parseInt(d.Total_Fatal_Injuries);
-        } else {
+        if(states[abbr]["fatalInjuries"] == null) {
           states[abbr]["fatalInjuries"] = 0;
         }
-        if(states[abbr]["seriousInjuries"] != null) {
-          states[abbr]["seriousInjuries"] += parseInt(d.Total_Serious_Injuries);
-        } else {
+        states[abbr]["fatalInjuries"] += parseInt(d.Total_Fatal_Injuries);
+
+        if(states[abbr]["seriousInjuries"] == null) {
           states[abbr]["seriousInjuries"] = 0;
+        }
+        states[abbr]["seriousInjuries"] += parseInt(d.Total_Serious_Injuries);
+
+        if(states[abbr]["uninjured"] == null) {
+          states[abbr]["uninjured"] = 0;
+        }
+        console.log(d.Total_Uninjured);
+        if(d.Total_Uninjured != '') {
+          states[abbr]["uninjured"] += parseInt(d.Total_Uninjured);
         }
       }
   });
 
-  //console.log(states);
-  var stateData = [], abbrData = [], seriousData = [], fatalData = [];
+  console.log(states);
+  var stateData = [], abbrData = [], seriousData = [], fatalData = [], uninjuredData = [];
   Object.keys(states).forEach(function(d) {
     //console.log(d);
     //console.log(states[d]);
@@ -69,10 +76,12 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
       stateData.push(states[d]["fatalInjuries"] + states[d]["seriousInjuries"]);
       seriousData.push(states[d]["seriousInjuries"]);
       fatalData.push(states[d]["fatalInjuries"]);
+      uninjuredData.push(states[d]["uninjured"]);
     } else {
       stateData.push(0);
       seriousData.push(0);
       fatalData.push(0);
+      uninjuredData.push(0);
     }
     abbrData.push(d);
   });
@@ -268,18 +277,21 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
           document.getElementById('currentState').textContent = names[d];
           document.getElementById('currentFatal').textContent = fatalData[abbrData.indexOf(d)];
           document.getElementById('currentSerious').textContent = seriousData[abbrData.indexOf(d)];
+          document.getElementById('currentUninjured').textContent = uninjuredData[abbrData.indexOf(d)];
       }
 
       function handleMouseOut() {
           document.getElementById('currentState').textContent = '';
           document.getElementById('currentFatal').textContent = '';
           document.getElementById('currentSerious').textContent = '';
+          document.getElementById('currentUninjured').textContent = '';
       }
 
       function display(d, i) {
           document.getElementById('currentState').textContent = names[d];
           document.getElementById('currentFatal').textContent = fatalData[abbrData.indexOf(d)];
           document.getElementById('currentSerious').textContent = seriousData[abbrData.indexOf(d)];
+          document.getElementById('currentUninjured').textContent = uninjuredData[abbrData.indexOf(d)];
       }
 
   //console.log(d3.selectAll(".tick"));
