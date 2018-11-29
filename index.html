@@ -29,9 +29,17 @@
             		</div>
             		<div id="button-container" class="button-container" style="padding-left: 20px;">
             		</div>
-            		<div style="text-align: center; padding-top: 50px;">
-            			<span style="font-style: italic;">Select which states' data you wish to view. Blue states are selected; white states are not selected.</span>
+            		<div style="text-align: center; padding-top: 20px; padding-bottom: 10px">
+            			<span style="font-style: italic;">Select which states' data you wish to view. Blue states are selected; white states are not selected. The graphs below are previews of your changes. Select the "View" tabs to see details and interact with the data.</span>
             		</div>
+                        
+                    <span><div>
+                        <svg id="mini_phase"></svg>
+                        <svg id="mini_state"></svg>
+                    </div>
+                    <div>
+                        
+                    </div></span>
                 </div>
                 <div class="tab-pane" id="phases">
                 	<script>$.getScript("phases.js", () => {
@@ -63,7 +71,8 @@
                     	<strong style="color: mediumpurple;">Serious Injuries: </strong> <span id="currentSerious"></span> <br/>
                     	<strong style="color: #7eb338;">Uninjured: </strong> <span id="currentUninjured"></span> <br/>
                     	<div style="padding-top: 30px;">
-                    	<button id="nyScaleButton" class="ny-scale-button">Exclude NY from Scale</button>
+                    	<button id="nyScaleButton" class="ny-scale-button">Zoom In Scale</button>
+                    	<!-- <input class="maxScaleInput" maxLength="50" size="50" id="maxScaleValue"/> -->
                     	</div>
                     </div>  
                 </div>
@@ -78,6 +87,8 @@
 			});*/
 		$.getScript("map.js", () => {
 			create();
+            createPhaseMini();
+            createStateMini();
 		});
         //$(".phase-tab").click(function() {
         //    $.getScript("phases.js");

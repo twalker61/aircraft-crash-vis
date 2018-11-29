@@ -30,14 +30,14 @@ var s_svg = d3.select("#states-svg")
 d3.csv("aircraft_incidents.csv", function(error, data) {
 
   var states = {"AK" : {}, "AL" : {}, "AR" : {}, "AZ": {}, "CA" : {}, "CO" : {}, "CT" : {}, "DC" : {},
-  "DE" : {},"FL" : {},"GA" : {}, "HI" : {},"IA" : {},"ID" : {},"IL" : {},"IN" : {},"KS" : {},
+  "DE" : {},"FL" : {},"GA" : {}, "GU" : {}, "HI" : {},"IA" : {},"ID" : {},"IL" : {},"IN" : {},"KS" : {},
   "KY" : {},"LA" : {},"MA" : {},"MD" : {},"ME" : {},"MI" : {},"MN" : {},"MO" : {},"MS" : {},
   "MT" : {},"NC" : {},"ND" : {},"NE" : {},"NH" : {},"NJ" : {},"NM" : {},"NV" : {},"NY" : {},
   "OH" : {},"OK" : {},"OR" : {},"PA" : {},"RI" : {},"SC" : {},"SD" : {},"TN" : {},"TX" : {},
   "UT" : {},"VA" : {},"VT" : {},"WA" : {},"WI" : {},"WV" : {},"WY" : {}};
 
   var names = {"AL" : "Alabama", "AK" : "Alaska", "AZ" : "Arizona", "AR": "Arkansas", "CA" : "California", "CO" : "Colorado", "CT" : "Connecticut", "DC" : "District of Columbia",
-  "DE" : "Delaware","FL" : "Florida","GA" : "Georgia", "HI" : "Hawaii","ID" : "Idaho","IL" : "Illinois","IN" : "Indiana","IA" : "Iowa","KS" : "Kansas",
+  "DE" : "Delaware","FL" : "Florida","GA" : "Georgia", "GU" : "Guam", "HI" : "Hawaii","ID" : "Idaho","IL" : "Illinois","IN" : "Indiana","IA" : "Iowa","KS" : "Kansas",
   "KY" : "Kentucky","LA" : "Louisiana","ME" : "Maine","MD" : "Maryland","MA" : "Massachusetts","MI" : "Michigan","MN" : "Minnesota","MS" : "Mississippi","MO" : "Missouri",
   "MT" : "Montana","NE" : "Nebraska","NV" : "Nevada","NH" : "New Hampshire","NJ" : "New Jersey","NM" : "New Mexico","NY" : "New York","NC" : "North Carolina","ND" : "North Dakota",
   "OH" : "Ohio","OK" : "Oklahoma","OR" : "Oregon","PA" : "Pennsylvania","RI" : "Rhode Island","SC" : "South Carolina","SD" : "South Dakota","TN" : "Tennessee","TX" : "Texas",
@@ -60,14 +60,14 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         if(states[abbr]["uninjured"] == null) {
           states[abbr]["uninjured"] = 0;
         }
-        console.log(d.Total_Uninjured);
+        //console.log(d.Total_Uninjured);
         if(d.Total_Uninjured != '') {
           states[abbr]["uninjured"] += parseInt(d.Total_Uninjured);
         }
       }
   });
 
-  console.log(states);
+  //console.log(states);
   var stateData = [], abbrData = [], seriousData = [], fatalData = [], uninjuredData = [];
   Object.keys(states).forEach(function(d) {
     //console.log(d);
@@ -159,18 +159,19 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 
   d3.select("#nyScaleButton")
     .on("click", function() {
-      console.log(this.textContent);
-      if(this.textContent == "Exclude NY from Scale") {
+      //console.log(this.textContent);
+      if(this.textContent == "Zoom In Scale") {
         y.domain([0, d3.max(abbrData, function(d, i) { 
           if(d == "NY") {return 0;}
           return seriousData[i] + fatalData[i];
         })]);
-        $("#nyScaleButton").text("Include NY in Scale");
-      } else if (this.textContent == "Include NY in Scale") {
+        y.domain([0,100]);
+        $("#nyScaleButton").text("Reset Scale");
+      } else if (this.textContent == "Reset Scale") {
         y.domain([0, d3.max(abbrData, function(d, i) { 
           return seriousData[i] + fatalData[i];
         })]);
-        $("#nyScaleButton").text("Exclude NY from Scale");
+        $("#nyScaleButton").text("Zoom In Scale");
       }
       
       yAxisGroup.call(d3.axisLeft(y));
@@ -227,7 +228,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         return d;
       })
       .attr("x", function(d, i) {
-        return 6 + (i * ((width - 2) / 51));
+        return 21+ (i * ((width - 33) / 52));
       })
       .attr("width", function(d, i) {
         return 10;
@@ -255,7 +256,7 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
         return d;
       })
       .attr("x", function(d, i) {
-        return 6 + (i * ((width - 2) / 51));
+        return 21+(i * ((width - 33) / 52));
       })
       .attr("width", function(d, i) {
         /*if(d == "NY") {return 20;}
@@ -358,59 +359,59 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
 });
 }*/
 
-    numberSort = function (a,b) {
-            return a - b;
-        };
+    // numberSort = function (a,b) {
+    //         return a - b;
+    //     };
 
-        //updates the x axis, not currently in use, need to update to v4
-        function updateStateAxis() {
-            console.log(selectedStates);
-            x.domain(selectedStates.reverse());
-            /*xAxis = d3.svg.axis()
-              .scale(x)
-              .orient("bottom");*/
-            //svg.selectAll(".x.axis")
-              //.call(xAxis);
-            xAxisGroup.call(d3.axisBottom(x));
+    //     //updates the x axis, not currently in use, need to update to v4
+    //     function updateStateAxis() {
+    //         //console.log(selectedStates);
+    //         x.domain(selectedStates.reverse());
+    //         /*xAxis = d3.svg.axis()
+    //           .scale(x)
+    //           .orient("bottom");*/
+    //         //svg.selectAll(".x.axis")
+    //           //.call(xAxis);
+    //         xAxisGroup.call(d3.axisBottom(x));
 
-            var ticks = [];
-            console.log(xAxisGroup);
-            //d3.selectAll('g.tick')["_parents"][0].forEach(function(d) {
-              //console.log(d.attributes[1].nodeValue);
-              console.log(svg.selectAll('g.tick')["_parents"][0]);
-              //var str = d.attributes[1].nodeValue;
-              var str = d3.selectAll('g.tick')["_parents"][0].attributes[0].nodeValue;
-              console.log(str.substring(str.indexOf("(") + 1, str.indexOf(",")));
-              str = str.substring(str.indexOf("(") + 1, str.indexOf(","));
-              if(parseInt(str) != 0) {
-                ticks.push(parseInt(str));
-              }
-              //return str.substring(str.indexOf("(") + 1, str.indexOf(","));
-            //});
-            //console.log(ticks);
-            ticks.sort(numberSort);
-            console.log(ticks);
+    //         var ticks = [];
+    //         //console.log(xAxisGroup);
+    //         //d3.selectAll('g.tick')["_parents"][0].forEach(function(d) {
+    //           //console.log(d.attributes[1].nodeValue);
+    //           console.log(svg.selectAll('g.tick')["_parents"][0]);
+    //           //var str = d.attributes[1].nodeValue;
+    //           var str = d3.selectAll('g.tick')["_parents"][0].attributes[0].nodeValue;
+    //           console.log(str.substring(str.indexOf("(") + 1, str.indexOf(",")));
+    //           str = str.substring(str.indexOf("(") + 1, str.indexOf(","));
+    //           if(parseInt(str) != 0) {
+    //             ticks.push(parseInt(str));
+    //           }
+    //           //return str.substring(str.indexOf("(") + 1, str.indexOf(","));
+    //         //});
+    //         //console.log(ticks);
+    //         ticks.sort(numberSort);
+    //         console.log(ticks);
               
-            svg.selectAll('.bar')
-            .filter(function(d) {
-                return selectedStates.includes(d);
-            })
-            .attr("x", function(d, i){
-              console.log(i);
-              if(i >= (selectedStates.length / 2)) {i -= (selectedStates.length / 2);}
-              //return 15 + (i * ((width - 2 * 9) / selectedStates.length / 2));
-              return ticks[i] - 5;
-            })
+    //         svg.selectAll('.bar')
+    //         .filter(function(d) {
+    //             return selectedStates.includes(d);
+    //         })
+    //         .attr("x", function(d, i){
+    //           console.log(i);
+    //           if(i >= (selectedStates.length / 2)) {i -= (selectedStates.length / 2);}
+    //           //return 15 + (i * ((width - 2 * 9) / selectedStates.length / 2));
+    //           return ticks[i] - 5;
+    //         })
 
-            d3.selectAll(".tick")["_parents"][0].forEach(function(d1) {
-              var data = d3.select(d1).data();
-              console.log(data);
-              if(names[data[0]] == null) {return;}
-              d3.select(d1)
-                .on("mouseover", handleMouseOver)                  
-                .on("mouseout", handleMouseOut);
-            });
-        }
+    //         d3.selectAll(".tick")["_parents"][0].forEach(function(d1) {
+    //           var data = d3.select(d1).data();
+    //           console.log(data);
+    //           if(names[data[0]] == null) {return;}
+    //           d3.select(d1)
+    //             .on("mouseover", handleMouseOver)                  
+    //             .on("mouseout", handleMouseOut);
+    //         });
+    //     }
 
 //DELETE EVERYTHING BENEATH HERE
 
