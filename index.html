@@ -29,9 +29,17 @@
             		</div>
             		<div id="button-container" class="button-container" style="padding-left: 20px;">
             		</div>
-            		<div style="text-align: center; padding-top: 50px;">
-            			<span style="font-style: italic;">Select which states' data you wish to view. Blue states are selected; white states are not selected.</span>
+            		<div style="text-align: center; padding-top: 20px; padding-bottom: 10px">
+            			<span style="font-style: italic;">Select which states' data you wish to view. Blue states are selected; white states are not selected. The graphs below are previews of your changes. Select the "View" tabs to see details and interact with the data.</span>
             		</div>
+                        
+                    <span><div>
+                        <svg id="mini_phase"></svg>
+                        <svg id="mini_state"></svg>
+                    </div>
+                    <div>
+                        
+                    </div></span>
                 </div>
                 <div class="tab-pane" id="phases">
                 	<script>$.getScript("phases.js", () => {
@@ -78,6 +86,8 @@
 			});*/
 		$.getScript("map.js", () => {
 			create();
+            createPhaseMini();
+            createStateMini();
 		});
         //$(".phase-tab").click(function() {
         //    $.getScript("phases.js");

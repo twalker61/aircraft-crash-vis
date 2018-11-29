@@ -126,8 +126,8 @@ function create() {
 
 			text_g.append("text")
 				.attr("class", "label")
-				.attr("transform", "translate("+margin.left/2+","+height/2+"), rotate(-90)")
-				.text("Number per Injury Category")
+				.attr("transform", "translate("+margin.left/2+","+(height/2 - margin.top)+"), rotate(-90)")
+				.text("Number of Injuries per Category")
 				.style("text-anchor", "middle");
 
 			filtered_uninjured = [];
@@ -236,7 +236,7 @@ function create() {
 				//.on("mouseover", displayDetails);
 
 			filtered_uninjured.forEach((d) => {
-				console.log("index");
+				//console.log("index");
 				label_g.append("text")
 					.attr("class", "point-label")
 					.attr("transform", "translate(" + (xScale(d.key) + margin.left + graphOffset) + "," + (height - margin.bottom/1.5) + ")")
@@ -244,6 +244,9 @@ function create() {
 					.style("text-anchor", "middle")
 					.on("mouseover", () => {
 						var i = filtered_uninjured.indexOf(d);
+						console.log(d);
+						console.log(filtered_uninjured);
+						console.log(filtered_uninjured.indexOf(d));
 						document.getElementById('currentPhase').textContent = d.key;
 					    document.getElementById('currFatal').textContent = filtered_fatal[i].sum;
 					   	document.getElementById('currSerious').textContent = filtered_injured[i].sum;
@@ -291,7 +294,7 @@ function drawGraph(addedStates) {
 		var key = d.key;
 		filtered_uninjured.push({key, sum});
 	})
-	console.log(filtered_uninjured);
+	//console.log(filtered_uninjured);
 	filtered_uninjured[9].sum += filtered_uninjured[10].sum;
 	filtered_uninjured[9].sum += filtered_uninjured[11].sum;
 	filtered_uninjured.pop();
@@ -357,7 +360,8 @@ function drawGraph(addedStates) {
 		.transition()
 		.duration(750)
 		.attr("cy", (d) => {
-			console.log("moving");
+			//console.log("moving");
+			console.log("Main: "+(yScale(d.sum) - margin.bottom))
 			return yScale(d.sum) - margin.bottom;
 		})
 

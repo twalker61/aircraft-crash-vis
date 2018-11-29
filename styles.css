@@ -52,7 +52,7 @@
 
 .stateButton {
   border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 10px;
+  padding: 3px;
   font-size: 15px;
   text-align: center;
   width: 160px;
@@ -60,13 +60,20 @@
 
 .resetButton {
 border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 10px;
+  padding: 5px;
   font-size: 15px;
   text-align: center;
   width: 160px;
 }
 
+
+
 .injured {
+  stroke-width:2px;
+  stroke:mediumpurple;
+  fill:none;
+}
+.mini-injured {
   stroke-width:2px;
   stroke:mediumpurple;
   fill:none;
@@ -83,6 +90,11 @@ border: 1px solid rgba(0, 0, 0, 0.8);
   stroke:crimson;
   fill:none;
 }
+.mini-fatal {
+  stroke-width:2px;
+  stroke:crimson;
+  fill:none;
+}
 
 /*.uninjured-circle {
   fill:#00FF00;
@@ -93,8 +105,16 @@ border: 1px solid rgba(0, 0, 0, 0.8);
   fill:mediumpurple;
   /*stroke:none;*/
 }
+.mini-serious-injury {
+  fill:mediumpurple;
+  /*stroke:none;*/
+}
 
 .fatal-injury {
+  fill:crimson;
+  /*stroke:none;*/
+}
+.mini-fatal-injury {
   fill:crimson;
   /*stroke:none;*/
 }
