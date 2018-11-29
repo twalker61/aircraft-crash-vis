@@ -161,10 +161,10 @@ d3.csv("aircraft_incidents.csv", function(error, data) {
     .on("click", function() {
       //console.log(this.textContent);
       if(this.textContent == "Zoom In Scale") {
-        y.domain([0, d3.max(abbrData, function(d, i) { 
+        /*y.domain([0, d3.max(abbrData, function(d, i) { 
           if(d == "NY") {return 0;}
           return seriousData[i] + fatalData[i];
-        })]);
+        })]);*/
         y.domain([0,100]);
         $("#nyScaleButton").text("Reset Scale");
       } else if (this.textContent == "Reset Scale") {
