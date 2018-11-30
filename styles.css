@@ -127,3 +127,7 @@ border: 1px solid rgba(0, 0, 0, 0.8);
 .ny-scale-button {
   /*padding-top: 10px;*/
 }
+
+.maxScaleInput {
+  width: 10px;
+}
